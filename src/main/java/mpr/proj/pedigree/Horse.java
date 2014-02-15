@@ -102,7 +102,7 @@ public int getIntOfSex() {
         }
         else
         {
-                return 1500;
+                return 3;
         }
 }
 }

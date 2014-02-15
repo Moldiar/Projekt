@@ -24,7 +24,7 @@ public class Main {
 			}
 			case 2: {
 
-				Options.wypisywanieDanych();
+				Options.showingLists();
 				break;
 			}
 			case 3: {

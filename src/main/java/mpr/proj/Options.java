@@ -44,7 +44,7 @@ public abstract class Options {
 		}
 	}
 
-	public static void wypisywanieDanych() {
+	public static void showingLists() {
 		EasyIn.clear();
 		System.out.println("|\\  /|  ___ |\\  | |   |");
 		System.out.println("| \\/ | |___ | \\ | |   |");

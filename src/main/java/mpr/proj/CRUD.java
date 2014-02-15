@@ -7,7 +7,6 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.Statement;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.List;
 
 import mpr.proj.pedigree.*;
@@ -24,7 +23,7 @@ public abstract class CRUD {
 
 		for (Horse hoars : Horses) {
 			System.out.println("ID: " + hoars.getID() + " Name: "
-					+ hoars.getName() + " Sex: " + hoars.getSex().toString()
+					+ hoars.getName() + " Sex: " + hoars.getSex().valueOf(hoars.getIntOfSex())
 					+ " Colour: " + hoars.getColor().getLname()
 					+ " Date of Birth: " + hoars.getDob().getDate().toString()
 					+ " Father: " + ifHorseNameNull(hoars.getSire())
@@ -89,14 +88,14 @@ public abstract class CRUD {
 			while (result.next()) {
 				Horses.add(
 						(int) result.getLong("ID"),
-						new Horse(result.getLong("ID"), result
-								.getString("NAME"), Sex.valueOf(result
-								.getInt("SEX")), new DateOfBirth(result
-								.getDate("DOB")), downloadColour(result
-								.getInt("COLOR")), downloadHorse(result
-								.getInt("SIRE")), downloadHorse(result
-								.getInt("DAM")), downloadBreeder(result
-								.getInt("BREEDER"))));
+						new Horse(result.getLong("ID"), 
+								result.getString("NAME"), 
+								Sex.valueOf(result.getInt("SEX")), 
+								new DateOfBirth(result.getDate("DOB")), 
+								downloadColour(result.getInt("COLOR")), 
+								downloadHorse(result.getInt("SIRE")), 
+								downloadHorse(result.getInt("DAM")), 
+								downloadBreeder(result.getInt("BREEDER"))));
 			}
 			con.close();
 			return Horses;
@@ -117,12 +116,12 @@ public abstract class CRUD {
 			if (result.next()) {
 				con.close();
 				return new Horse(result.getLong("ID"),
-						result.getString("NAME"), Sex.valueOf(result
-								.getInt("SEX")), new DateOfBirth(
-								result.getDate("DOB")),
+						result.getString("NAME"), Sex.valueOf(
+								result.getInt("SEX")), 
+								new DateOfBirth(result.getDate("DOB")),
 						downloadColour(result.getInt("COLOR")),
-						downloadHorse(result.getInt("SIRE")),
-						downloadHorse(result.getInt("DAM")),
+						null,
+						null,
 						downloadBreeder(result.getInt("BREEDER")));
 
 			} else {
@@ -161,16 +160,15 @@ public abstract class CRUD {
 
 	public static String ifHorseNameNull(Horse horse) {
 		if (horse == null) {
-			return "No Parent!";
+			return "Orphan!";
 		} else {
 			return horse.getName();
 		}
 	}
 
 	public static Integer ifHorseIdNull(Horse horse) {
-		Integer i = null;
 		if (horse == null) {
-			return i;
+			return 0;
 		} else {
 			return (int) horse.getID();
 		}
@@ -248,6 +246,7 @@ public abstract class CRUD {
 
 	public static void showBreeders() {
 		List<Breeder> Breeders = getAllBreeders();
+		
 		for (Breeder bree : Breeders) {
 			System.out.println("Breeder ID: " + bree.getId()
 					+ " Breeder Name: " + bree.getName() + " Country: "
